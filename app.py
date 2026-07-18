@@ -93,7 +93,20 @@ def find_conflicting_booking(equipment_id, from_date, to_date, bookings):
 
     TODO (Task 1): implement.
     """
-    raise NotImplementedError
+    for booking in bookings:
+        if booking["equipment_id"] != equipment_id:
+            continue
+
+        if booking.get("status") == "cancelled":
+            continue
+
+        existing_start = parse_date(booking["from_date"])
+        existing_end = parse_date(booking["to_date"])
+
+        if dates_overlap(from_date, to_date, existing_start, existing_end):
+            return booking
+
+    return None
 
 
 def calculate_total(daily_rate, days):
