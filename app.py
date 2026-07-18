@@ -78,7 +78,13 @@ def dates_overlap(start_a, end_a, start_b, end_b):
 
     TODO (Task 1): implement.
     """
-    raise NotImplementedError
+    if end_a == start_b and start_a != start_b:
+        return False
+
+    if end_b == start_a and start_b != start_a:
+        return False
+
+    return start_a <= end_b and start_b <= end_a
 
 
 def find_conflicting_booking(equipment_id, from_date, to_date, bookings):
