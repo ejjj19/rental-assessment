@@ -69,7 +69,7 @@ def rental_days(from_date, to_date):
 
     TODO (Task 1): implement.
     """
-    raise NotImplementedError
+    return (to_date - from_date).days + 1
 
 
 def dates_overlap(start_a, end_a, start_b, end_b):
