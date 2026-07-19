@@ -97,9 +97,6 @@ def find_conflicting_booking(equipment_id, from_date, to_date, bookings):
         if booking["equipment_id"] != equipment_id:
             continue
 
-        if booking.get("status") == "cancelled":
-            continue
-
         existing_start = parse_date(booking["from_date"])
         existing_end = parse_date(booking["to_date"])
 
@@ -163,8 +160,13 @@ def availability():
 @app.route("/api/bookings", methods=["POST"])
 def create_booking():
     data = request.get_json(force=True)
-
     equipment = get_equipment(data.get("equipment_id"))
+
+    customer = data.get("customer", "").strip()
+
+    if not customer:
+        return jsonify({"error": "Customer name is required"}), 400
+
     if equipment is None:
         return jsonify({"error": "Unknown equipment"}), 400
 
@@ -193,7 +195,7 @@ def create_booking():
         "id": (max([b["id"] for b in bookings]) + 1) if bookings else 1,
         "equipment_id": equipment["id"],
         "equipment_name": equipment["name"],
-        "customer": data.get("customer", ""),
+        "customer": customer,
         "from_date": data["from_date"],
         "to_date": data["to_date"],
         "total": total,
